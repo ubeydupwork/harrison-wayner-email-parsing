@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import boto3
-import config  # yerel config dosyasını içe aktar
 
 # --------------------------
 # Streamlit Ayarları
@@ -20,11 +19,11 @@ st.title("🏠 Email Dashboard")
 def load_data():
     s3 = boto3.client(
         "s3",
-        aws_access_key_id=config.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
-        region_name=config.AWS_REGION
+        aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
+        region_name=st.secrets["AWS_REGION"]
     )
-    obj = s3.get_object(Bucket=config.BUCKET_NAME, Key=config.FILE_KEY)
+    obj = s3.get_object(Bucket=st.secrets["BUCKET_NAME"], Key=st.secrets["FILE_KEY"])
     df = pd.read_csv(obj["Body"])
     return df
 
